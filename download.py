@@ -1,4 +1,11 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC ## CDC Data Download
+# MAGIC
+# MAGIC The data can be downloaded every Friday
+
+# COMMAND ----------
+
 
 import requests
 from pathlib import Path
@@ -49,4 +56,11 @@ download_file(url, f"nwss_covid_{t}.csv", volumepath)
 
 # MPox data
 # blob:https://www.cdc.gov/01b061ee-6ee0-4bfc-bb09-d48413e44b23
-# Check if the URL remains the same 
+# blob:https://www.cdc.gov/4fa9d5c1-ba63-4f2b-b521-b65731bb34b7
+# The Mpox data URL changes every week
+# The page is Javascript generated, and needs Selenium...
+
+
+# COMMAND ----------
+
+
