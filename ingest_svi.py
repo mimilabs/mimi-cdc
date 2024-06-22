@@ -5,6 +5,10 @@
 
 # COMMAND ----------
 
+# MAGIC %run /Workspace/Repos/yubin.park@mimilabs.ai/mimi-common-utils/ingestion_utils
+
+# COMMAND ----------
+
 # MAGIC %sql
 # MAGIC --DROP TABLE mimi_ws_1.cdc.svi_county_y2022;
 # MAGIC --DROP TABLE mimi_ws_1.cdc.svi_county_y2020;
@@ -13,25 +17,12 @@
 # MAGIC --DROP TABLE mimi_ws_1.cdc.svi_county_y2014;
 # MAGIC --DROP TABLE mimi_ws_1.cdc.svi_county_y2010;
 # MAGIC --DROP TABLE mimi_ws_1.cdc.svi_county_y2000;
-# MAGIC
 
 # COMMAND ----------
-
-from pathlib import Path
-import re
-import csv
-from pyspark.sql.functions import col, lit, to_date
-from datetime import datetime
-from dateutil.parser import parse
-import pandas as pd
-from datetime import date
 
 path = "/Volumes/mimi_ws_1/cdc/src" # where all the input files are located
 catalog = "mimi_ws_1" # delta table destination catalog
 schema = "cdc" # delta table destination schema
-def change_header(header_org):
-    return [re.sub(r'\W+', '', column.lower().replace(' ','_'))
-            for column in header_org]
 
 # COMMAND ----------
 
@@ -60,7 +51,9 @@ for item in files:
                 "STCOFIPS": str}
     pdf = pd.read_csv(item[1], dtype=str_vars)
     pdf.columns = change_header(pdf.columns)
-    pdf["_input_file_date"] = item[0]
+    pdf["mimi_src_file_date"] = item[0]
+    pdf["mimi_src_file_name"] = item[1].name
+    pdf["mimi_dlt_load_date"] = datetime.today().date()
     df = spark.createDataFrame(pdf)
     tablename_year = f"{tablename}_county_y{item[0].year}"
     (df.write
@@ -110,7 +103,9 @@ for item in files:
                 "FIPS": str}
     pdf = pd.read_csv(item[1], dtype=str_vars)
     pdf.columns = change_header(pdf.columns)
-    pdf["_input_file_date"] = item[0]
+    pdf["mimi_src_file_date"] = item[0]
+    pdf["mimi_src_file_name"] = item[1].name
+    pdf["mimi_dlt_load_date"] = datetime.today().date()
     df = spark.createDataFrame(pdf)
     tablename_year = f"{tablename}_censustract_y{item[0].year}"
     (df.write

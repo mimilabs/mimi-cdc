@@ -63,4 +63,16 @@ download_file(url, f"nwss_covid_{t}.csv", volumepath)
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ## VSRR - Drug Overdose Death counts
+
+# COMMAND ----------
+
+url = "https://data.cdc.gov/api/views/x9gk-5huc/rows.csv?accessType=DOWNLOAD&api_foundry=true"
+url = "https://data.cdc.gov/api/views/xkb8-kh2a/rows.csv?accessType=DOWNLOAD&api_foundry=true"
+volumepath = "/Volumes/mimi_ws_1/cdc/src/vsrr_drugoverdose"
+download_file(url, f"vsrr_drugoverdose_{t}.csv", volumepath)
+
+# COMMAND ----------
+
 
